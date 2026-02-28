@@ -5,7 +5,7 @@ import FHKDomain
 import FHKUtils
 
 @MainActor
-public final class FHKRemoteConfigManager: FHKRemoteConfigManagerProtocol {
+public final class FHKRemoteConfigService: FHKRemoteConfigManagerProtocol {
     public let remoteConfig: RemoteConfig
     public var enabledLanguages: [String] = []
     
