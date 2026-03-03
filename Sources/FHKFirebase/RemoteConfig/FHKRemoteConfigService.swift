@@ -43,28 +43,21 @@ public final class FHKRemoteConfigService: FHKRemoteConfigManagerProtocol {
         remoteConfig.setDefaults(defaultValues)
     }
     
-    public func fetchConfig(completion: @escaping (Error?) -> Void) {
-        remoteConfig.fetchAndActivate { [weak self] (status, error) in
-            guard let self = self else { return }
-            
-            switch status {
-            case .successFetchedFromRemote:
-                Logger.info("✅ Firebase: Datos frescos descargados.")
-            case .successUsingPreFetchedData:
-                Logger.info("🏠 Firebase: Usando datos de la caché local.")
-            case .error:
-                Logger.error("❌ Firebase: Error en la red o Throttling.")
-            @unknown default:
-                break
-            }
-            
-            // Actualizamos la propiedad SIEMPRE, ya que si falló el fetch,
-            // ahora tendrá al menos los defaults que pusimos arriba.
-            Task { @MainActor in
-                self.enabledLanguages = self.getEnabledLanguages()
-                completion(error)
-            }
+    public func fetchConfig() async throws {
+        let status = try await remoteConfig.fetchAndActivate()
+        
+        switch status {
+        case .successFetchedFromRemote:
+            Logger.info("✅ Firebase: Datos frescos descargados.")
+        case .successUsingPreFetchedData:
+            Logger.info("🏠 Firebase: Usando datos de la caché local.")
+        case .error:
+            Logger.error("❌ Firebase: Error en la red o Throttling.")
+        @unknown default:
+            break
         }
+        
+        self.enabledLanguages = self.getEnabledLanguages()
     }
     
     // MARK: - Obtener Lenguajes
