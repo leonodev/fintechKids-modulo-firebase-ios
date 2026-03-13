@@ -60,6 +60,21 @@ public final class FHKRemoteConfigService: FHKRemoteConfigManagerProtocol {
         self.enabledLanguages = self.getEnabledLanguages()
     }
     
+    public func getCachedTimeExpiration() async -> Int {
+        let defaultValue: Int = 5 // minutes
+        do {
+            // We tried to refresh the server values
+            let status = try await remoteConfig.fetchAndActivate()
+            let configValue = remoteConfig.configValue(forKey: "cached_time_expiration")
+            
+            let value = configValue.numberValue.intValue
+            return value > 0 ? value : defaultValue
+        } catch {
+            Logger.error("Error Getting cached_time_expiration from Remote Config: \(error)")
+            return defaultValue
+        }
+    }
+    
     // MARK: - Obtener Lenguajes
     private func getEnabledLanguages() -> [String] {
         let configValue = remoteConfig.configValue(forKey: "enabled_languages")
