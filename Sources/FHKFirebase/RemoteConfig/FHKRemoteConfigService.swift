@@ -61,7 +61,7 @@ public final class FHKRemoteConfigService: FHKRemoteConfigManagerProtocol {
     }
     
     public func getCachedTimeExpiration() async -> Int {
-        let defaultValue: Int = 5 // minutes
+        let defaultValue: Int = 3 // minutes
         do {
             // We tried to refresh the server values
             let status = try await remoteConfig.fetchAndActivate()
