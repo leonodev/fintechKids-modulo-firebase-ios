@@ -6,12 +6,29 @@
 //
 import FHKDomain
 import FirebaseAnalytics
+import FirebaseCrashlytics
 
 public final class FHKAnalyticsService: FHKAnalyticsProtocol {
     public init() {}
 
     public func track(_ event: AnalyticsEvent) {
-        Analytics.logEvent(event.name, parameters: event.parameters)
+        switch event {
+        case .error(let detail):
+            //  Analytics: For statistics (KPIs)
+            Analytics.logEvent("app_error", parameters: [
+                "error_type": detail.type
+            ])
+            
+            // Crashlytics: For DEBURGING
+            let crashlytics = Crashlytics.crashlytics()
+            crashlytics.setCustomValue(detail.type, forKey: "last_error_type")
+            crashlytics.setCustomValue(detail.message, forKey: "last_error_json")
+            
+            crashlytics.log("Error: \(detail.type) - Details: \(detail.message)")
+        default:
+            // Normal events (ScrenView, TapButton)
+            Analytics.logEvent(event.name, parameters: event.parameters)
+        }
     }
 }
 
