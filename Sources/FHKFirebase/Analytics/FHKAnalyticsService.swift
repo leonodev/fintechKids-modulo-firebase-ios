@@ -11,10 +11,7 @@ public final class FHKAnalyticsService: FHKAnalyticsProtocol {
     public init() {}
 
     public func track(_ event: AnalyticsEvent) {
-        Analytics.logEvent(
-            event.name,
-            parameters: event.parameters
-        )
+        Analytics.logEvent(event.name, parameters: event.parameters)
     }
 }
 
