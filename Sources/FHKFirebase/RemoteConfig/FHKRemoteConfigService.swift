@@ -19,7 +19,6 @@ public final class FHKRemoteConfigService: FHKRemoteConfigManagerProtocol {
         
         remoteConfig = RemoteConfig.remoteConfig()
         setupSettings()
-        getMenuOptionsHome()
     }
     
     public func fetchConfig() async throws {
@@ -37,7 +36,7 @@ public final class FHKRemoteConfigService: FHKRemoteConfigManagerProtocol {
         }
         
         self.enabledLanguages = self.getEnabledLanguages()
-        self.getMenuOptionsHome()
+        self.menuHomeItems = self.getMenuOptionsHome()
     }
     
     public func getCachedTimeExpiration() async -> Int {
@@ -89,10 +88,9 @@ private extension FHKRemoteConfigService {
     }
 
     // MARK: - get menus by home
-    private func getMenuOptionsHome() {
-        let menuHomeItems: [MenuHomeItem] = fetchAndDecodeRemoteConfig(forKey: "menus_bottom_bar_enables",
-                                                                       defaultValue: [])
-        self.menuHomeItems = menuHomeItems
+    private func getMenuOptionsHome() ->  [MenuHomeItem] {
+        return fetchAndDecodeRemoteConfig(forKey: "menus_bottom_bar_enables",
+                                          defaultValue: [])
     }
     
     private func fetchAndDecodeRemoteConfig<T: Decodable>(forKey key: String, defaultValue: T) -> T {
