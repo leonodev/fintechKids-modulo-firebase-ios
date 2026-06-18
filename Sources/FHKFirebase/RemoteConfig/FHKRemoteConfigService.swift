@@ -22,7 +22,8 @@ public final class FHKRemoteConfigService: FHKRemoteConfigManagerProtocol {
     }
     
     public func fetchConfig() async throws {
-        let status = try await remoteConfig.fetchAndActivate()
+        let localRemoteConfig = RemoteConfig.remoteConfig()
+        let status = try await localRemoteConfig.fetchAndActivate()
         
         switch status {
         case .successFetchedFromRemote:
