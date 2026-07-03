@@ -19,7 +19,7 @@ public final class FHKRemoteConfigServiceMock: FHKRemoteConfigManagerProtocol {
     
     public var menuHomeItems: [MenuHomeItem] {
         return [
-            MenuHomeItem(id: 0,
+            MenuHomeItem(id: 1,
                          name: "payments",
                          icon: "payments-icon",
                          label_localized_key: "key_payments_title",
