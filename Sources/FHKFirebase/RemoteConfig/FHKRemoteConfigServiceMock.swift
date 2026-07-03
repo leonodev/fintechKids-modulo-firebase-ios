@@ -11,6 +11,8 @@ import Foundation
 @MainActor
 public final class FHKRemoteConfigServiceMock: FHKRemoteConfigManagerProtocol {
     
+    public init(){}
+    
     public var enabledLanguages: [String] {
         return []
     }
